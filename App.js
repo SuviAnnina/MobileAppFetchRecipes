@@ -24,6 +24,7 @@ export default function App() {
         console.error(err);
         setLoading(false);
       })
+    setSearch("");
   }
 
   return (
@@ -41,11 +42,11 @@ export default function App() {
       </View>
 
       {loading ? (<ActivityIndicator size="large" />) :
-        (<View style={{ flex: 6 }}>
+        (<View style={{ flex: 6, width: '100%' }}>
           <FlatList
             data={recipes}
             renderItem={({ item }) =>
-              <View style={{ margin: 10 }}>
+              <View style={{ marginBottom: 50, alignItems: 'center' }}>
                 <Text>{item.strMeal}</Text>
                 <Image
                   style={{ width: 120, height: 120 }}
@@ -57,8 +58,6 @@ export default function App() {
             }
           />
         </View>)}
-
-
       <StatusBar style="auto" />
     </View>
   );
@@ -70,5 +69,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+
+
   },
 });
