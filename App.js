@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, FlatList, Image, ActivityIndicator } from 'react-native';
 
 export default function App() {
 
@@ -9,6 +9,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
 
   const fetchRecipes = () => {
+    setLoading(true);
     fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${search}`)
       .then(response => {
         if (!response)
@@ -17,12 +18,11 @@ export default function App() {
       })
       .then(data => {
         setRecipes(data.meals);
-        console.log("joujee fetchi jepa")
-        console.log(search)
-
+        setLoading(false);
       })
       .catch(err => {
         console.error(err);
+        setLoading(false);
       })
   }
 
@@ -40,17 +40,23 @@ export default function App() {
         />
       </View>
 
-      <View style={{ flex: 6 }}>
-        <FlatList
-          data={recipes}
-          renderItem={({ item }) =>
-            <View style={{ margin: 10 }}>
-              <Text>{item.strMeal}</Text>
-
-            </View>
-          }
-        />
-      </View>
+      {loading ? (<ActivityIndicator size="large" />) :
+        (<View style={{ flex: 6 }}>
+          <FlatList
+            data={recipes}
+            renderItem={({ item }) =>
+              <View style={{ margin: 10 }}>
+                <Text>{item.strMeal}</Text>
+                <Image
+                  style={{ width: 120, height: 120 }}
+                  source={{
+                    uri: item.strMealThumb,
+                  }}
+                />
+              </View>
+            }
+          />
+        </View>)}
 
 
       <StatusBar style="auto" />
